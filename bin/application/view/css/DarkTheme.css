@@ -1,0 +1,413 @@
+.root{
+	-style-background-color: #2d2d2d;
+	-style-border-color: derive(-style-background-color,.4);
+	-style-default-color: derive(red,-.1);
+	
+	-fx-background-color: -style-background-color;
+}
+
+/*background*/
+.background{
+	-fx-border-width: 0;
+	-fx-background-color: -style-background-color;
+}
+
+/*label*/
+.label{
+	-fx-background-color: -style-background-color;
+	-fx-text-fill: white;
+}
+.infotext{
+	/*-fx-text-fill: blend(-style-background-color,-style-default-color);*/
+	-fx-opacity: 0.7;
+	-fx-border-width: 0 0 0 3;
+	-fx-border-color: -style-background-color;
+	-fx-font-size: 15;
+}
+
+/*split pane*/
+.split-pane{
+	-fx-background-color: -style-background-color;
+}
+.split-pane:horizontal > .split-pane-divider{
+	-fx-background-color: derive(-style-background-color,.5);
+}
+
+/*button*/
+.button{
+	-button-color: -style-background-color;
+	-fx-background-radius: 0;
+	-fx-background-color: -button-color;
+	-fx-text-fill: white;
+	-fx-font-size: 15;
+	-fx-border-width: 2;
+	-fx-border-color: derive(-button-color,.5);
+}
+.mainbutton{
+	-button-color: -style-default-color;
+}
+.button:pressed{
+	-fx-background-color: derive(-button-color,.3);
+	-fx-text-fill: derive(-button-color,-.4);
+}
+.button:focused {
+    -fx-border-color:  white;
+}
+
+/*Toggle button*/
+.toggle-button{
+	-fx-background-insets: 0 0 1 0;
+	-fx-background-radius: 0;
+	-fx-background-color: -style-background-color;
+	-fx-text-fill: white;
+	-fx-font-size: 15;
+	-fx-border-width: 2;
+	-fx-border-color: -style-border-color;
+}
+.toggle-button:pressed{
+	-fx-background-color: derive(-style-background-color,.3);
+	-fx-text-fill: derive(-style-background-color,-.4);
+}
+.toggle-button:focused {
+    -fx-border-color:  white;
+}
+.toggle-button:selected {
+	-fx-background-color: -style-default-color;
+}
+
+/*ChoiceBox*/
+.choice-box{
+	-fx-border-color: white;
+	-fx-border-radius: 7;
+	-fx-background-color: -style-background-color;
+	-fx-text-fill: white;
+}
+.choice-box:pressed{
+	-fx-background-color: derive(-style-background-color,.3);
+	-fx-text-fill: derive(-style-background-color,-.4);
+}
+.choice-box:focused {
+    -fx-border-color:  white;
+}
+
+/*menubar*/
+.menu-bar{
+	-fx-background-color: derive(-style-background-color,-.3);
+}
+.menu > .label{
+	-fx-border-width: 0;
+	-fx-background-color:transparent;
+}
+.menu:showing, .menu:hover{
+	-fx-background-color: -style-default-color;
+}
+.menu > .container{
+	-fx-background-color: derive(-style-background-color,-.3);
+}
+.menu-item > .label{
+	-fx-border-width: 0;
+	-fx-background-color: transparent;
+}
+.menu-item:showing, .menu-item:hover, .menu-item:focused{
+	-fx-background-color: -style-default-color;
+}
+.menu .context-menu{
+	-fx-background-color: derive(-style-background-color,-.3);
+}
+
+/*text field*/
+.text-field{
+	-fx-border-color: white;
+	-fx-border-radius: 7;
+	-fx-background-color: -style-background-color;
+	-fx-text-fill: white;
+	-fx-highlight-fill: -style-default-color;
+}
+.text-field:focused{
+	-fx-background-color: derive(-style-background-color,.1);
+}
+
+/*text area*/
+.text-area{
+	-fx-focus-color: transparent;
+	-fx-text-box-border: transparent;
+	-fx-text-fill: white;
+	-fx-highlight-fill: -style-default-color;
+	-fx-border-width: 0;
+	-fx-background-color: transparent;
+}
+.text-area .content{
+	-fx-focus-color: transparent;
+	-fx-text-box-border: transparent;
+	-fx-background-color: -style-background-color;
+}
+.text-area:focused .content{
+	-fx-background-color: derive(-style-background-color,.1);
+}
+.text-area .scroll-pane{
+	-fx-border-color: white;
+	-fx-border-radius: 7;
+	-fx-focus-color: transparent;
+	-fx-text-box-border: transparent;
+	-fx-background-color: transparent;
+}
+
+/*scroll pane*/
+.scroll-pane{
+	-fx-background-color: -style-background-color;
+}
+.scroll-pane:focused{
+	-fx-border-color: green;
+}
+.scroll-pane .corner{
+	-fx-background-color: -style-background-color;
+}
+.scroll-pane .corner:hover{
+	-fx-background-radius: 5;
+	-fx-background-insets: 3;
+	-fx-background-color: white;
+}
+
+/*scroll bar*/
+ .scroll-bar{
+	-fx-background-color: -style-background-color;
+}
+ .scroll-bar .decrement-button:hover, .scroll-pane .scroll-bar .increment-button:hover, .scroll-pane .scroll-bar .decrement-button:pressed, .scroll-pane .scroll-bar .increment-button:pressed{
+	-fx-background-color: transparent;
+}
+ .scroll-bar .thumb, .scroll-pane .scroll-bar .decrement-arrow, .scroll-pane .scroll-bar .increment-arrow{
+	-fx-background-color: white;
+}
+ .scroll-bar .decrement-arrow:hover, .scroll-pane .scroll-bar .increment-arrow:hover, .scroll-pane .scroll-bar .decrement-arrow:pressed, .scroll-pane .scroll-bar .increment-arrow:pressed{
+	-fx-background-color: -style-default-color;
+}
+
+/*tab pame */
+.tab-header-background{
+	-fx-border-width: 0 0 2 0;
+	-fx-border-color: -style-border-color;
+	-fx-background-color: -style-background-color;
+}
+.tab{
+	-fx-border-radius: 4 4 0 0;
+	-fx-border-insets: 0 0 2 0;
+	-fx-border-width: 2 2 0 2;
+	-fx-border-color: -style-border-color;
+	-fx-background-color: transparent;
+}
+.tab:selected{
+	-fx-border-color: -style-default-color;
+}
+.tab .tab-label{
+	-fx-text-fill: white;
+	-fx-font-size: 15;
+}
+.tab-close-button{
+	-fx-background-color: -style-default-color;
+}
+.tab-close-button:hover{
+	-fx-background-color: derive(-style-default-color,.5);
+}
+.tab-container>.focus-indicator{
+	-fx-border-color: transparent;
+}
+
+/*table view*/
+.table-view, .table-view .filler{
+	-fx-background-color: -style-background-color;
+	-fx-size: 15;
+}
+.table-view .column-header, .table-view .column-header-background {
+	-fx-background-color: transparent;
+}
+.table-view .label{
+	-fx-text-fill: white;
+}
+.table-view .column-resize-line, .table-view .column-drag-header{
+	-fx-background-color: -style-default-color;
+}
+.table-view .table-cell{
+	-fx-background-color: transparent;
+	-fx-text-fill: white;
+	-fx-highlight-fill: -style-default-color;
+	-fx-border-width: 0;
+}
+.table-view .table-row-cell{
+	-fx-background-color:-style-background-color;
+}
+.table-view .table-row-cell:selected{
+	-fx-background-color: derive(-style-background-color,.3);
+}
+
+/*list view*/
+.list-view{
+	-fx-background-color: -style-background-color;
+	-fx-border-color: white;
+	-fx-border-radius: 7;
+}
+.list-cell{
+	-fx-background-color: transparent;
+	-fx-text-fill: white;
+	-fx-border-width: 0;
+}
+.list-cell:selected{
+	-fx-background-color: derive(-style-background-color,.3);
+}
+
+.menubutton{
+	-fx-border-width: 0;
+	-fx-background-color:transparent;
+}
+.menubutton:selected, .menubutton:pressed {
+	-fx-background-color: -style-default-color;
+}
+
+/*Switch button */
+.switch-button-background{
+	-fx-fill: derive(-style-background-color,-.4);
+}
+
+.switch-button-slider{
+	-fx-fill: white;
+}
+.switch-button-slider:pressed{
+	-fx-fill: -style-default-color;
+}
+
+/*Alert window*/
+.dialog-pane:header .header-panel{
+	-fx-background-color: -style-background-color;
+}
+
+/*progressBar*/
+.progress-bar .track{
+	-fx-background-color: derive(-style-background-color,.2);
+}
+.progress-bar>.bar{
+	-fx-background-color:-style-default-color;
+}
+
+/*App specyfic*/
+
+.file-tile{
+	-fx-pref-height: 54px;
+	-fx-min-height: -fx-pref-height;
+	-fx-max-height: -fx-pref-height;
+	-fx-border-width: 2;
+	-fx-border-color: -style-border-color;
+}
+
+.tile-button{
+	-fx-pref-height: 54px;
+	-fx-min-height: -fx-pref-height;
+	-fx-max-height: -fx-pref-height;
+	
+	-fx-font-size: 15;
+	-fx-background-radius: 5;
+	-fx-blend-mode: hard-light;
+	-fx-background-insets: 2 0;
+	-fx-background-color: derive(-style-background-color,.4);
+	-fx-border-width: 0 0 0 0;
+}
+
+.open-button>.graphics{
+	/*-fx-shape: "M .5 0 h -.5 v 1 h 1 v -.5";*/
+	-fx-border-color: -style-default-color;
+	-fx-border-width: 3;
+}
+.open-button>.graphics>.graphics{
+	-fx-border-insets: -2 -2 6 6;
+	-fx-background-insets: 0 0 9 9;
+	-fx-shape: "M 1 1 h -.2 l .2 .2 v -.2";
+	-fx-background-color: -style-default-color;
+	-fx-border-width: 2;
+	-fx-border-color: -style-border-color;
+}
+
+.play-button>.graphics{
+	-fx-border-color: -style-default-color;
+	-fx-border-width: 3;
+	/*-fx-background-color: -style-default-color;**/
+	-fx-shape: "M .7 .5 L .3 .7 L .3 .3 Z";
+}
+.play-button:pressed{
+	-fx-text-fill: derive(-style-default-color,.8);
+}
+
+.stop-button{
+	-fx-border-radius: 10;
+	-fx-border-color: -style-border-color;
+	-fx-border-width: 2;
+	-fx-border-insets: -2 0 0 0;
+	/*-fx-background-insets: 1 0 -1 0;*/
+	-fx-background-radius: 10;
+	-fx-background-color: -style-background-color;
+}
+.stop-button:pressed{
+	-fx-background-color: derive(-style-background-color,.08);
+}
+.stop-button>.graphics{
+	-fx-border-color: -style-default-color;
+	-fx-border-width: 2;
+	/*-fx-background-color: -style-default-color;**/
+	-fx-shape: "M 0 0 L 0 1 L 1 1 L 1 0 L 0 0 Z";
+	/*-fx-shape: "M 0 0 L 0 1 L 1 1 L 1 0 L 0 0 M .3 .3 L .3 .7 L .7 .7 L .7 .3 L .3 .3 M 0 0 L .3 .3 M 0 1 L .3 .7 M 1 1 L .7 .7 M 1 0 L .7 .3 Z";*/
+}
+
+.play-toggle-button{
+	
+	
+	-fx-border-radius: 10;
+	-fx-border-color: -style-border-color;
+	-fx-border-width: 2;
+	-fx-border-insets: -2 0 0 0;
+	/*-fx-background-insets: 1 0 -1 0;*/
+	-fx-background-radius: 10;
+	-fx-background-color: -style-background-color;
+}
+.play-toggle-button:pressed, .play-toggle-button:selected:pressed{
+	-fx-background-color: derive(-style-background-color,.08);
+}
+.play-toggle-button>.graphics{
+	
+	-fx-border-color: -style-default-color;
+	-fx-border-width: 2;
+	/*-fx-background-color: -style-default-color;**/
+	-fx-shape: "M .7 .5 L .3 .7 L .3 .3 Z";
+}
+.play-toggle-button:selected{
+	-fx-background-color: -style-background-color;
+}
+.play-toggle-button:selected>.graphics{
+	-fx-shape: "M 0 0 v 1 h .35 v -1 h -.35 M .7 0 v 1 h .35 v -1 h -.35 Z";
+}
+
+
+.dir-graphics{
+	-fx-border-insets: 5 8 5 5;
+	-fx-border-color: -style-border-color;
+	-fx-border-width: 2;
+	-fx-shape: "M 0 0 v 1 h 1 v -.75 h -.4 l -.3 -.25 z";
+}
+.dir-graphics>.graphics{
+	-fx-border-insets: 15 0 5 5;
+	-fx-border-color: -style-border-color;
+	-fx-border-width: 2;
+	-fx-shape: "M 0 1 l .2 -1 h .8 l -.2 1 z";
+}
+
+.file-graphics{
+	-fx-border-insets: 4 10 6 5;
+	-fx-border-color: -style-border-color;
+	-fx-border-width: 2;
+	-fx-shape: "M 0 0 v 1 h 1 v -.75 l -.3 -.25 h -.7";
+}
+.file-graphics>.graphics{
+	-fx-border-insets: 10 15 10 8;
+	-fx-border-color: -style-border-color;
+	-fx-border-width: 2;
+	-fx-shape: "M .03 .7 l .27 .27 l .27 -.27 l -.27 -.27 z M 0 .7 l .3 .3 l .3 -.3 V .07 h .2 v -.07 h -.27 V .67 L .3 .4 L 0 .7";
+}
+
+
+/*App specyfic*/

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<BorderPane styleClass="file-tile" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.PlayerPane">
+   <left>
+      <Label fx:id="playedIndex" text="0:00" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <Label fx:id="fileLength" text="0:42" BorderPane.alignment="CENTER" />
+   </right>
+   <top>
+      <BorderPane BorderPane.alignment="CENTER">
+         <center>
+            <Label fx:id="fileName" text="Label" BorderPane.alignment="CENTER" />
+         </center>
+         <right>
+            <HBox BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stop" styleClass="stop-button">
+                     <graphic>
+                        <Pane prefHeight="20.0" prefWidth="20.0" styleClass="graphics" />
+                     </graphic>
+                  </Button>
+                  <ToggleButton fx:id="playButton" mnemonicParsing="false" onAction="#togglePlay" styleClass="play-toggle-button">
+                     <graphic>
+                        <Pane prefHeight="20.0" prefWidth="20.0" styleClass="graphics" />
+                     </graphic>
+                  </ToggleButton>
+               </children>
+            </HBox>
+         </right>
+      </BorderPane>
+   </top>
+   <center>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" onMouseDragged="#progressMouseDraged" onMousePressed="#progressMousePressed" onMouseReleased="#progressMouseReleased" prefWidth="200.0" progress="0.32" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

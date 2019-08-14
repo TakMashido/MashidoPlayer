@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<MashidoPlayer>
+    <openedTabs>
+        <tab classname="application.view.DirView" dirName="C:\Users\Przemek\Desktop\speech datasets\spoken wikipedia\Problem">
+            <opened name="C:\Users\Przemek\Desktop\speech datasets\spoken wikipedia\Problem\Spoken_Wikipedia_-_Polish_-_Larisa_Łazutina_16012008.wav" play="true" time="964338"/>
+        </tab>
+    </openedTabs>
+</MashidoPlayer>
