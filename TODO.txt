@@ -7,6 +7,5 @@ create launcher/installer for it
 create app icon
 create new open dir icon. Actual one is ugly
 store all recently playied somewhere. Another Tab?
-add mp3 support.
 if trying to launch new instance of this open new tab with choosem dir in existing one.
 add welcome tab - version, license, creator, link to git with it itp.

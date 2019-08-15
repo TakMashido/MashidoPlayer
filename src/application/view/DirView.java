@@ -26,6 +26,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class DirView extends Tab implements Finishable,Saveable{
 	@FXML
@@ -189,22 +190,16 @@ public class DirView extends Tab implements Finishable,Saveable{
 				
 				str=el.getAttribute("time");
 				if(str==null) MashidoPlayerMain.handleFailedToLoadDataFile();
-				long time=0;
+				double time=0;
 				try {
-					time=Long.parseLong(str);
+					time=Double.parseDouble(str);
 				} catch(NumberFormatException ex) {
 					ex.printStackTrace();
 					MashidoPlayerMain.handleFailedToLoadDataFile();
 				}
 				
 				PlayerPane player=openPlayerPane(playiedFile);
-				try {
-					player.setFrame(time);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-					MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Load error", "Can't adjust time in file "+playiedFile.getName());
-					continue;
-				}
+				player.seekTime(new Duration(time));
 				
 				str=el.getAttribute("play");
 				if(str!=null && Boolean.parseBoolean(str)) {
@@ -221,7 +216,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 				PlayerPane player=(PlayerPane)child;
 				Element opened=document.createElement("opened");
 				opened.setAttribute("name", player.getFile().getAbsolutePath());
-				opened.setAttribute("time", Long.toString(player.getActualFrame()));
+				opened.setAttribute("time", Double.toString(player.getCurrentTime().toMillis()));
 				opened.setAttribute("play", Boolean.toString(player.isPlaying()));
 				node.appendChild(opened);
 			}

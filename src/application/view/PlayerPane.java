@@ -3,23 +3,23 @@ package application.view;
 import java.io.File;
 import java.io.IOException;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import application.MashidoPlayerMain;
-import application.libs.JumpableAudioInputStream;
-import application.libs.JumpableAudioPlayer;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class PlayerPane extends AnchorPane{
 	
@@ -38,15 +38,16 @@ public class PlayerPane extends AnchorPane{
 	
 	private boolean updateProgressBar=true;
 	
-	private double frameRate;
-	private long fileFrames;
-	
 	private DirView parent;
 	private File file;
 	private int index;
 	
-	private JumpableAudioInputStream stream;
-	private JumpableAudioPlayer player;
+	private double length;				//in seconds
+	private Duration currentTime=Duration.ZERO;
+	
+	private boolean isPlaying=false;
+	private Media media;
+	private MediaPlayer player;
 	
 	public static PlayerPane get(File file, DirView parent, int index) {
 		try {
@@ -74,24 +75,28 @@ public class PlayerPane extends AnchorPane{
 		this.file=file;
 		fileName.setText(file.getName());
 		
-		try {
-			stream=new JumpableAudioInputStream(file);
-			player=new JumpableAudioPlayer(stream);
-			player.setCurrentTimeConsumer((long l)->timeParser(l));
-		} catch (LineUnavailableException e) {
-			MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Failed to play", "Audio out data line is unavaliable.").show();
-			e.printStackTrace();
-			return false;
-		} catch (UnsupportedAudioFileException | IOException e) {
-			MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Failed to load", "Selected file is not valid audio file").show();
-			e.printStackTrace();
-			return false;
-		}
+		media=new Media(file.toURI().toString());
+		player=new MediaPlayer(media);
 		
-		fileFrames=stream.getFrameLength();
-		frameRate=stream.getFormat().getFrameRate();
-		
-		fileLength.setText(getTimeString((int)(stream.getFrameLength()/stream.getFormat().getFrameRate())));
+		player.setOnStopped(new Runnable() {
+			public void run() {
+				setPlay(false);
+			}
+		});
+		player.currentTimeProperty().addListener(new ChangeListener<Duration>() {
+			@Override
+			public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+				updateTime(newValue);
+			}
+		});
+		player.setOnReady(new Runnable() {
+			public void run() {
+				length=media.getDuration().toSeconds();
+				fileLength.setText(getTimeString((int)(length)));
+				if(currentTime!=Duration.ZERO) 
+					seekTime(currentTime);
+			}
+		});
 		
 		return true;
 	}
@@ -120,55 +125,53 @@ public class PlayerPane extends AnchorPane{
 		double newProgress=e.getX()/progressBar.getWidth();
 		if(newProgress<0||newProgress>1)return;
 		progressBar.setProgress(newProgress);
-		playedIndex.setText(getTimeString((int)(newProgress*fileFrames/frameRate)));
+		playedIndex.setText(getTimeString((int)(length*newProgress)));
 	}
 	@FXML
 	private void progressMouseReleased(MouseEvent e) {
 		double newProgress=e.getX()/progressBar.getWidth();
 		if(newProgress<0||newProgress>1)return;
 		progressBar.setProgress(newProgress);
-		try {
-			stream.jumpFrame((long)(newProgress*fileFrames));
-		} catch (IOException e1) {
-			MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Failed to jump", "Error ocured during seeking sselected audio position");
-			e1.printStackTrace();
-		}
+		player.seek(media.getDuration().multiply(newProgress));
 		updateProgressBar=true;
 	}
 	
-	public void setFrame(long frameIndex) throws IOException {
-		stream.jumpFrame(frameIndex);
+	public void seekTime(Duration seekTime) {
+		currentTime=seekTime;
+		playedIndex.setText(getTimeString((int)(seekTime.toSeconds())));
+		player.seek(seekTime);
+	}
+	public Duration getCurrentTime() {
+		return currentTime;
 	}
 	
 	void setPlay(boolean play) {
-		if(play!=isPlaying())togglePlay();
+		if(isPlaying==play)return;
+		if(play) {
+			player.play();
+		} else {
+			player.pause();
+		}
+		isPlaying=play;
+		playButton.setSelected(isPlaying);
 	}
 	
 	@FXML
 	void togglePlay() {
-		player.toggleAudio();
-		playButton.setSelected(player.isPlaying());
+		setPlay(!isPlaying);
 	}
 	
 	public boolean isPlaying() {
-		return player.isPlaying();
+		return isPlaying;
 	}
 	
-	private void timeParser(long time) {
-		if(time==-1) {				//End of file
-			playButton.setSelected(false);
-			return;
-		}
-		if(time==-2) {
-			MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Failed to play", "Can't open audio data line");
-			return;
-		}
-		
+	private void updateTime(Duration time) {
+		currentTime=time;
 		if(updateProgressBar) {
 			Platform.runLater(new Runnable() {
 				public void run() {
-					progressBar.setProgress((double)time/fileFrames);
-					playedIndex.setText(getTimeString((int)(time/frameRate)));
+					progressBar.setProgress(time.toSeconds()/length);
+					playedIndex.setText(getTimeString((int)(time.toSeconds())));
 				}
 			});
 		}
@@ -177,14 +180,14 @@ public class PlayerPane extends AnchorPane{
 	public File getFile() {
 		return file;
 	}
-	public long getActualFrame() {
-		return stream.getActualFrame();
+	public Duration playTime() {
+		return player.getCurrentTime();
 	}
 	
 	@FXML
 	private void stop(){
-		if(player.isPlaying()) {
-			togglePlay();
+		if(isPlaying) {
+			setPlay(false);
 		}
 		parent.stop(file, index);
 	}

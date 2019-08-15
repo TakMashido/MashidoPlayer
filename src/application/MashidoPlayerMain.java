@@ -45,9 +45,6 @@ public class MashidoPlayerMain extends Application {
 	
 	@Override
 	public void start(Stage stage) throws FileNotFoundException {
-		test();
-		System.exit(0);
-		
 		primaryStage=stage;
 		
 		loadedCss=getClass().getResource("view/css/DarkTheme.css").toExternalForm();
@@ -191,15 +188,12 @@ public class MashidoPlayerMain extends Application {
 		
 		switch(name) {
 		case "wav":
-		case "WAVE":
-		case "AU":
-		case "au":
-		case "AIFF":
+		case "mp3":
+		case "mp4":
+		case "mp4a":
 		case "aif":
-		case "AIFF-C":
+		case "aiff":
 		case "aifc":
-		case "SND":
-		case "snd":
 			return true;
 		}
 		return false;
@@ -239,9 +233,5 @@ public class MashidoPlayerMain extends Application {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		launch(args);
-	}
-
-	public void test() {
-		
 	}
 }
