@@ -9,9 +9,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,9 +26,6 @@ import org.xml.sax.SAXException;
 
 import application.view.MainView;
 import javafx.application.Application;
-import javafx.css.PseudoClass;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -197,34 +192,6 @@ public class MashidoPlayerMain extends Application {
 			return true;
 		}
 		return false;
-	}
-	
-	/*
-	 * For graphics debug propouses.
-	 * Prints to System.out parent's and it's childs css clases and pseudo classes
-	 */
-	public static void inspectCSSTree(Parent parent, int level){
-		List<Node> childs=parent.getChildrenUnmodifiable();
-		for(Node node:childs) {
-			List<String> styles=node.getStyleClass();
-			for(String style:styles) {
-				System.out.println();
-				for(int i=0;i<level;i++)System.out.print("\t");
-				System.out.print(style);
-			}
-			Set<PseudoClass> pseudoClasses=node.getPseudoClassStates();
-			for(PseudoClass ps:pseudoClasses) {
-				System.out.println();
-				for(int i=0;i<level;i++)System.out.print("\t");
-				System.out.print(":"+ps.getPseudoClassName());
-			}
-			if(node instanceof Parent) {
-				System.out.println("{");
-				inspectCSSTree((Parent)node, level+1);
-			}
-		}
-		for(int i=0;i<level;i++)System.out.print("\t");
-		System.out.println("}");
 	}
 	
 	public static Stage getWindow() {
