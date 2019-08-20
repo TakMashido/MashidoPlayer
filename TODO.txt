@@ -1,7 +1,5 @@
 create app reload method(bat?) to be able to make automatic fresh start after critical error
-fix bug with player thread freezing when audioDevice get's disconected
 remove app freeze when opening dir containing lot's of files
-add volume changing
 add albums creation option
 create launcher/installer for it
 create app icon

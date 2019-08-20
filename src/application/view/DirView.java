@@ -184,27 +184,34 @@ public class DirView extends Tab implements Finishable,Saveable{
 				Element el = (Element) item;
 				
 				String str=el.getAttribute("name");
-				if(str==null) MashidoPlayerMain.handleFailedToLoadDataFile();
+				if(str.isEmpty()) MashidoPlayerMain.handleFailedToLoadDataFile();
 				File playiedFile=new File(str);
 				if(!playiedFile.isFile()||!playiedFile.getParentFile().equals(file))MashidoPlayerMain.handleFailedToLoadDataFile();
 				
 				str=el.getAttribute("time");
-				if(str==null) MashidoPlayerMain.handleFailedToLoadDataFile();
 				double time=0;
 				try {
-					time=Double.parseDouble(str);
+					if(str.length()!=0)time=Double.parseDouble(str);
 				} catch(NumberFormatException ex) {
 					ex.printStackTrace();
-					MashidoPlayerMain.handleFailedToLoadDataFile();
 				}
 				
 				PlayerPane player=openPlayerPane(playiedFile);
 				player.seekTime(new Duration(time));
 				
 				str=el.getAttribute("play");
-				if(str!=null && Boolean.parseBoolean(str)) {
+				if(str.length()!=0 && Boolean.parseBoolean(str)) {
 					player.setPlay(true);
 				}
+				
+				str=el.getAttribute("volume");
+				double volume=1;
+				try {
+					if(str.length()!=0)volume=Double.parseDouble(str);
+				} catch(NumberFormatException ex) {
+					ex.printStackTrace();
+				}
+				player.setVolume(volume);
 			}
 		}
 	}
@@ -218,6 +225,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 				opened.setAttribute("name", player.getFile().getAbsolutePath());
 				opened.setAttribute("time", Double.toString(player.getCurrentTime().toMillis()));
 				opened.setAttribute("play", Boolean.toString(player.isPlaying()));
+				opened.setAttribute("volume", Double.toString(player.getVolume()));
 				node.appendChild(opened);
 			}
 		}

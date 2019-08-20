@@ -12,8 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -35,6 +35,8 @@ public class PlayerPane extends AnchorPane{
 	private ToggleButton playButton;
 	@FXML
 	private ProgressBar progressBar;
+	@FXML
+	private Slider volumeSlider;
 	
 	private boolean updateProgressBar=true;
 	
@@ -98,6 +100,8 @@ public class PlayerPane extends AnchorPane{
 			}
 		});
 		
+		player.volumeProperty().bind(volumeSlider.valueProperty());
+		
 		return true;
 	}
 	
@@ -134,6 +138,15 @@ public class PlayerPane extends AnchorPane{
 		progressBar.setProgress(newProgress);
 		player.seek(media.getDuration().multiply(newProgress));
 		updateProgressBar=true;
+	}
+	
+	public void setVolume(double volume) {
+		if(volume<0)volume=0;
+		if(volume>1)volume=1;
+		volumeSlider.setValue(volume);
+	}
+	public double getVolume() {
+		return volumeSlider.getValue();
 	}
 	
 	public void seekTime(Duration seekTime) {

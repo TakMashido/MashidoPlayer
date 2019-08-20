@@ -2,6 +2,7 @@
 	-style-background-color: #2d2d2d;
 	-style-border-color: derive(-style-background-color,.4);
 	-style-default-color: derive(red,-.1);
+	-style-darker-background-color: derive(-style-background-color,-.3);
 	
 	-fx-background-color: -style-background-color;
 }
@@ -47,7 +48,7 @@
 	-button-color: -style-default-color;
 }
 .button:pressed{
-	-fx-background-color: derive(-button-color,.3);
+	-fx-background-color: derive(-button-color,.1);
 	-fx-text-fill: derive(-button-color,-.4);
 }
 .button:focused {
@@ -65,7 +66,7 @@
 	-fx-border-color: -style-border-color;
 }
 .toggle-button:pressed{
-	-fx-background-color: derive(-style-background-color,.3);
+	-fx-background-color: derive(-style-background-color,.1);
 	-fx-text-fill: derive(-style-background-color,-.4);
 }
 .toggle-button:focused {
@@ -106,6 +107,10 @@
 }
 .menu-item > .label{
 	-fx-border-width: 0;
+	-fx-background-color: transparent;
+}
+.menu-item{
+	-fx-background-color: derive(-style-background-color,-.3);
 	-fx-background-color: transparent;
 }
 .menu-item:showing, .menu-item:hover, .menu-item:focused{
@@ -287,6 +292,14 @@
 	-fx-background-color:-style-default-color;
 }
 
+/*slider*/
+.slider>.thumb{
+	-fx-background-color: -style-default-color;
+}
+.slider>.track{
+	-fx-background-color: derive(-style-background-color,.2);
+}
+
 /*App specyfic*/
 
 .file-tile{
@@ -338,7 +351,7 @@
 	-fx-border-radius: 10;
 	-fx-border-color: -style-border-color;
 	-fx-border-width: 2;
-	-fx-border-insets: -2 0 0 0;
+	-fx-border-insets: -2 -1 0 -1;
 	/*-fx-background-insets: 1 0 -1 0;*/
 	-fx-background-radius: 10;
 	-fx-background-color: -style-background-color;
@@ -355,12 +368,10 @@
 }
 
 .play-toggle-button{
-	
-	
 	-fx-border-radius: 10;
 	-fx-border-color: -style-border-color;
 	-fx-border-width: 2;
-	-fx-border-insets: -2 0 0 0;
+	-fx-border-insets: -2 -2 -1 0;
 	/*-fx-background-insets: 1 0 -1 0;*/
 	-fx-background-radius: 10;
 	-fx-background-color: -style-background-color;
@@ -369,7 +380,6 @@
 	-fx-background-color: derive(-style-background-color,.08);
 }
 .play-toggle-button>.graphics{
-	
 	-fx-border-color: -style-default-color;
 	-fx-border-width: 2;
 	/*-fx-background-color: -style-default-color;**/
@@ -407,6 +417,47 @@
 	-fx-border-color: -style-border-color;
 	-fx-border-width: 2;
 	-fx-shape: "M .03 .7 l .27 .27 l .27 -.27 l -.27 -.27 z M 0 .7 l .3 .3 l .3 -.3 V .07 h .2 v -.07 h -.27 V .67 L .3 .4 L 0 .7";
+}
+
+/*Audio options MenuButton*/
+.audio-options-button{
+	-fx-border-insets: -2 -1 0 0;
+	-fx-border-color: -style-border-color;
+	-fx-border-width: 2;
+	-fx-border-radius: 10;
+	-fx-background-radius: 10;
+	-fx-background-insets: 0 1 1 1;
+	-fx-background-color: -style-background-color;
+}
+.audio-options-button>.label {
+	-fx-border-insets: 10;
+	-fx-background-insets: 10;
+	-fx-font-size: 12;
+	-fx-text-fill: -style-default-color;
+	-fx-background-color:transparent;
+	-fx-border-width: 0;
+}
+.audio-options-button>.arrow-button {
+    -fx-background-color:transparent;
+    -fx-padding: 0;
+}
+.audio-options-button>.arrow-button > .arrow {
+	-fx-background-color:transparent;
+    -fx-padding: 0;
+}
+.audio-options-button:showing{
+	-fx-border-color: white;
+	-fx-background-color: derive(-style-background-color,.1);
+}
+.audio-options-button .context-menu{
+	-fx-background-color: derive(-style-background-color,-.3);
+	
+	-fx-background-color: -style-background-color;
+	-fx-border-color: -style-border-color;
+	-fx-border-width: 1.5;
+}
+.audio-options-button .menu-item{
+	-fx-background-color: -style-background-color;
 }
 
 

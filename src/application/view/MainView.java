@@ -102,7 +102,7 @@ public class MainView extends AnchorPane implements Saveable{
 				new FileChooser.ExtensionFilter("All files", "*.*"),
 				new FileChooser.ExtensionFilter("WAV", "*.wav"),
 				new FileChooser.ExtensionFilter("MP3",  "*.mp3"),
-				new FileChooser.ExtensionFilter("MP4",  "*.mp4", "*mp4a"),
+				new FileChooser.ExtensionFilter("MP4",  "*.mp4", "*.mp4a"),
 				new FileChooser.ExtensionFilter("AIFF","*.aif", "*.aiff")
 				);
 		File file=chooser.showOpenDialog(MashidoPlayerMain.getWindow());
