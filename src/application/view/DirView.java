@@ -59,7 +59,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 		}
 	}
 	private void constructor(File file) {
-		if(!file.exists()|!file.isDirectory()) MashidoPlayerMain.handleFailedToLoadDataFile();
+		if(!file.exists()|!file.isDirectory()) throw new RuntimeException("Dir which you try to open doesn't exist");
 		
 		this.file=file;
 		setId("dir:"+file.getAbsolutePath());
@@ -187,6 +187,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 				if(str.isEmpty()) MashidoPlayerMain.handleFailedToLoadDataFile();
 				File playiedFile=new File(str);
 				if(!playiedFile.isFile()||!playiedFile.getParentFile().equals(file))MashidoPlayerMain.handleFailedToLoadDataFile();
+				if(!playiedFile.exists())continue;
 				
 				str=el.getAttribute("time");
 				double time=0;

@@ -148,6 +148,8 @@ public class MainView extends AnchorPane implements Saveable{
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e1) {
 					e1.printStackTrace();
 					MashidoPlayerMain.handleFailedToLoadDataFile();
+				} catch (RuntimeException ex) {				//Other loading error.
+					ex.printStackTrace();
 				}
 			}
 		}
