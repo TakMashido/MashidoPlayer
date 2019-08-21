@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -19,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
 public class PlayerPane extends AnchorPane{
@@ -80,7 +82,7 @@ public class PlayerPane extends AnchorPane{
 		media=new Media(file.toURI().toString());
 		player=new MediaPlayer(media);
 		
-		player.setOnStopped(new Runnable() {
+		player.setOnEndOfMedia(new Runnable() {
 			public void run() {
 				setPlay(false);
 			}
@@ -97,6 +99,21 @@ public class PlayerPane extends AnchorPane{
 				fileLength.setText(getTimeString((int)(length)));
 				if(currentTime!=Duration.ZERO) 
 					seekTime(currentTime);
+			}
+		});
+		player.statusProperty().addListener(new ChangeListener<Status>() {
+			@Override
+			public void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
+				if(newValue==Status.PLAYING) {
+					isPlaying=true;
+					playButton.setSelected(true);
+				} else if(newValue==Status.PAUSED) {
+					isPlaying=false;
+					playButton.setSelected(false);
+				} else if(newValue==Status.HALTED) {
+					MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Failed to play", "Critical error occured during reading the file");
+					stop();
+				}
 			}
 		});
 		
@@ -152,6 +169,7 @@ public class PlayerPane extends AnchorPane{
 	public void seekTime(Duration seekTime) {
 		currentTime=seekTime;
 		playedIndex.setText(getTimeString((int)(seekTime.toSeconds())));
+		progressBar.setProgress(seekTime.toSeconds()/length);
 		player.seek(seekTime);
 	}
 	public Duration getCurrentTime() {
@@ -165,8 +183,9 @@ public class PlayerPane extends AnchorPane{
 		} else {
 			player.pause();
 		}
-		isPlaying=play;
-		playButton.setSelected(isPlaying);
+		if(playButton.isSelected()!=play) {
+			playButton.setSelected(play);
+		}
 	}
 	
 	@FXML
@@ -202,6 +221,7 @@ public class PlayerPane extends AnchorPane{
 		if(isPlaying) {
 			setPlay(false);
 		}
+		player.dispose();
 		parent.stop(file, index);
 	}
 }

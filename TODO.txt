@@ -1,9 +1,11 @@
-create app reload method(bat?) to be able to make automatic fresh start after critical error
 remove app freeze when opening dir containing lot's of files
+if trying to launch new instance of this open new tab with choosen dir/file in existing one.
+make refreshing of dir possible/ make it automaticly
 add albums creation option
 create launcher/installer for it
+current time label near end of longer files shows time bigger then max time label.
 create app icon
 create new open dir icon. Actual one is ugly
 store all recently playied somewhere. Another Tab?
-if trying to launch new instance of this open new tab with choosem dir in existing one.
 add welcome tab - version, license, creator, link to git with it itp.
+create app reload method(bat?) to be able to make automatic fresh start after critical error
