@@ -46,6 +46,8 @@ public class MashidoPlayerMain extends Application {
 		
 		mainView=MainView.get();
 		mainView.getStylesheets().add(loadedCss);
+//		CssTools.addCssRefresher(mainView, new File("src/application/view/css/DarkTheme.css"));
+		
 		
 		stage.setTitle("Mashido Player");
 		
@@ -180,7 +182,6 @@ public class MashidoPlayerMain extends Application {
 	public static boolean isSupportedSoundFile(File file) {
 		String name=file.getName();
 		name=name.substring(name.lastIndexOf('.')+1);
-		
 		switch(name) {
 		case "wav":
 		case "mp3":

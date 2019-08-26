@@ -1,11 +1,15 @@
 remove app freeze when opening dir containing lot's of files
 if trying to launch new instance of this open new tab with choosen dir/file in existing one.
-make refreshing of dir possible/ make it automaticly
+open file/dir on drag'n'drop to app window
 add albums creation option
+add chaging playing speed option
+add precise time jump option
+add open dir in file system option
 create launcher/installer for it
-current time label near end of longer files shows time bigger then max time label.
+current time label near end of longer files shows time bigger then max time label. (Javafx Media bug?)
 create app icon
 create new open dir icon. Actual one is ugly
 store all recently playied somewhere. Another Tab?
 add welcome tab - version, license, creator, link to git with it itp.
 create app reload method(bat?) to be able to make automatic fresh start after critical error
+allow to have multiple windows with diffrend tabs

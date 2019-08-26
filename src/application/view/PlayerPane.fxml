@@ -15,10 +15,10 @@
 
 <BorderPane styleClass="file-tile" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.PlayerPane">
    <left>
-      <Label fx:id="playedIndex" text="0:00" BorderPane.alignment="CENTER" />
+      <Label fx:id="playedIndex" text="00:00" BorderPane.alignment="CENTER" />
    </left>
    <right>
-      <Label fx:id="fileLength" text="0:42" BorderPane.alignment="CENTER" />
+      <Label fx:id="fileLength" text="00:00" BorderPane.alignment="CENTER" />
    </right>
    <top>
       <BorderPane BorderPane.alignment="CENTER">
@@ -67,7 +67,7 @@
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" onMouseDragged="#progressMouseDraged" onMousePressed="#progressMousePressed" onMouseReleased="#progressMouseReleased" prefWidth="200.0" progress="0.32" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0" />
+            <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" onMouseDragged="#progressMouseDraged" onMousePressed="#progressMousePressed" onMouseReleased="#progressMouseReleased" prefWidth="200.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
    </center>

@@ -7,9 +7,9 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <ScrollPane fitToWidth="true" style="-fx-border-color: transparent;" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="scrollPane" fitToWidth="true" BorderPane.alignment="CENTER">
          <content>
-            <VBox fx:id="filesPane" prefWidth="100.0" styleClass="background" />
+            <VBox fx:id="filesPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="background" />
          </content>
       </ScrollPane>
    </center>

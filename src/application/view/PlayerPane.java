@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
@@ -79,7 +80,12 @@ public class PlayerPane extends AnchorPane{
 		this.file=file;
 		fileName.setText(file.getName());
 		
-		media=new Media(file.toURI().toString());
+		try {
+			media=new Media(file.toURI().toString());
+		} catch(MediaException ex) {
+			MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Can't open file", '"'+file.getName()+"\" file is corrupted").show();
+			return false;
+		}
 		player=new MediaPlayer(media);
 		
 		player.setOnEndOfMedia(new Runnable() {
@@ -216,12 +222,19 @@ public class PlayerPane extends AnchorPane{
 		return player.getCurrentTime();
 	}
 	
-	@FXML
-	private void stop(){
+	/**Prepare PlayerPane for deletion.
+	 * Stops audio if playied and invoce dispose in MediaPlayer.
+	 */
+	public void dispose() {
 		if(isPlaying) {
 			setPlay(false);
 		}
 		player.dispose();
+	}
+	
+	@FXML
+	private void stop(){
+		dispose();
 		parent.stop(file, index);
 	}
 }

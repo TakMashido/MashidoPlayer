@@ -3,7 +3,7 @@
 Simple audio player. Created to study javaFX.
 
 Allows playing of multilple files in paranel(podcast + music??),
-saves state of pleyied files after app close,
+saves state of playied files after app close,
 creating albums(TODO).
 
 To launch use MashidoPlayer.bat file, with compiled version(.jar) of it in same directory.

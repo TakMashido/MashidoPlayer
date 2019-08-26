@@ -2,6 +2,13 @@ package application.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchEvent.Kind;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -13,6 +20,7 @@ import org.w3c.dom.NodeList;
 import application.MashidoPlayerMain;
 import application.interfaces.Finishable;
 import application.interfaces.Saveable;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,6 +30,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -33,10 +42,14 @@ public class DirView extends Tab implements Finishable,Saveable{
 	private Label dirName;
 	@FXML
 	private VBox filesPane;
+	@FXML
+	private ScrollPane scrollPane;
 	
 	private List<Node> childs;
 	
 	private File file;
+	
+	private Thread watcherThread;
 	
 	public DirView() {}					//For further use with loadState(org.w3c.dom.Node);
 	public DirView(File file) {
@@ -94,10 +107,41 @@ public class DirView extends Tab implements Finishable,Saveable{
 						}
 					}
 				}				
+				watcherThread.interrupt();
 			}
 		});
+		
+		scrollPane.setFitToHeight(true);
 	}
 	
+	/**Return index of given file in childs list or -1 if not presents.
+	 * @param file File to find.
+	 * @return Read description.
+	 */
+	private int getFileIndex(File file) {
+		for(int i=0;i<childs.size();i++) {
+			Node node=childs.get(i);
+			if(node instanceof FilePane) {
+				if(((FilePane)node).getFile().equals(file)) return i;
+			} else if(node instanceof PlayerPane) {
+				if(((PlayerPane)node).getFile().equals(file)) return i;
+			} else if(node instanceof DirPane) {
+				if(((DirPane) node).getFile().equals(file)) return i;
+			}
+		}
+		return -1;
+	}
+	/**Gets index of last dirPane in childs
+	 * @return
+	 */
+	private int getLastDirIndex() {
+		for(int i=0;i<childs.size();i++) {
+			if(!(childs.get(i) instanceof DirPane)) {
+				return i-1;
+			}
+		}
+		return childs.size()-1;
+	}
 	public void play(File file) {
 		for(int i=0;i<childs.size();i++) {
 			Node node=childs.get(i);
@@ -107,9 +151,11 @@ public class DirView extends Tab implements Finishable,Saveable{
 					return;
 				}
 			} else if(node instanceof PlayerPane) {
-				PlayerPane player=(PlayerPane)node;
-				if(!player.isPlaying())player.togglePlay();
-				return;
+				if(((PlayerPane)node).getFile().equals(file)) {
+					PlayerPane player=(PlayerPane)node;
+					if(!player.isPlaying())player.togglePlay();
+					return;
+				}
 			}
 		}
 	}
@@ -141,7 +187,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 	public void stop(File file, int index) {
 		childs.set(index,FilePane.get(file, this, index));
 	}
-
+	
 	private boolean finished=false;
 	@Override
 	public void finishLoading() {
@@ -170,6 +216,10 @@ public class DirView extends Tab implements Finishable,Saveable{
 			while(!fileQueue.isEmpty()) {
 				childs.add(FilePane.get(fileQueue.poll(), this, index++));
 			}
+			
+			watcherThread=new Thread(new DirWatcher());
+			watcherThread.setDaemon(true);
+			watcherThread.start();
 		}
 	}
 	
@@ -186,8 +236,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 				String str=el.getAttribute("name");
 				if(str.isEmpty()) MashidoPlayerMain.handleFailedToLoadDataFile();
 				File playiedFile=new File(str);
-				if(!playiedFile.isFile()||!playiedFile.getParentFile().equals(file))MashidoPlayerMain.handleFailedToLoadDataFile();
-				if(!playiedFile.exists())continue;
+				if(!(playiedFile.exists()&&playiedFile.isFile()&&playiedFile.getParentFile().equals(file)))continue;
 				
 				str=el.getAttribute("time");
 				double time=0;
@@ -229,6 +278,69 @@ public class DirView extends Tab implements Finishable,Saveable{
 				opened.setAttribute("volume", Double.toString(player.getVolume()));
 				node.appendChild(opened);
 			}
+		}
+	}
+	
+	public void dispose() {
+		watcherThread.interrupt();
+	}
+	
+	private class DirWatcher implements Runnable {
+		@Override
+		public void run() {
+			Path path=file.toPath();
+			try {
+				WatchService watcher=FileSystems.getDefault().newWatchService();
+				
+				path.register(watcher, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE);
+				
+				while(true) {
+					WatchKey key=watcher.take();
+					
+					for(WatchEvent<?> event:key.pollEvents()) {
+						Kind<?> kind=event.kind();
+						if(kind==StandardWatchEventKinds.OVERFLOW) {
+							MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Failed to refresh files", "Directory change watcher becomed overflowed");
+						} else if(kind==StandardWatchEventKinds.ENTRY_CREATE) {
+							@SuppressWarnings("unchecked")
+							File added=path.resolve(((WatchEvent<Path>)event).context()).toFile();
+							Platform.runLater(new Runnable() {
+								public void run() {
+									if(added.isDirectory()) {
+										childs.add(getLastDirIndex()+1,DirPane.get(added));
+									}else if(added.isFile()) {
+										if(MashidoPlayerMain.isSupportedSoundFile(added)) {
+											Node node=FilePane.get(added, DirView.this, childs.size());
+											if(node!=null)
+												childs.add(node);
+										}
+									}
+								}
+							});
+							
+						} else if(kind==StandardWatchEventKinds.ENTRY_DELETE) {
+							@SuppressWarnings("unchecked")
+							int index=getFileIndex(path.resolve(((WatchEvent<Path>)event).context()).toFile());
+							if(index==-1)continue;
+							Node child=childs.get(index);
+							Platform.runLater(new Runnable() {
+								public void run() {
+									if(child instanceof PlayerPane)((PlayerPane) child).dispose();
+									childs.remove(index);
+								}
+							});
+						} else assert false:"Unrecognized event cought";
+					}
+					
+					if(!key.reset()) {
+										//Dir deleted. Somehow should also check if dir name modified and reset this dir then.
+						break;
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				
+			} catch (InterruptedException e) {}					//Loop inside try block
 		}
 	}
 }

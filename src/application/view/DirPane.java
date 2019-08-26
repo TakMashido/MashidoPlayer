@@ -42,6 +42,10 @@ public class DirPane extends AnchorPane{
 		dirName.setText(file.getName());
 	}
 	
+	public File getFile() {
+		return file;
+	}
+	
 	@FXML
 	private void open() {
 		MainView.openFile(file);
