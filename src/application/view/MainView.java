@@ -16,6 +16,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -58,12 +60,21 @@ public class MainView extends AnchorPane implements Saveable{
 	 * @return Tab containing opened file.
 	 */
 	public static Tab openFile(File file) {
+		return openFile(file, true);
+	}
+	/**Opens sound file and returns resoult tab. If {@code file} points to file open it's parent directory and automaticly plays it. 
+	 * @param file File to open.
+	 * @param autoPlay If file is audioFile start playing this file.
+	 * @return Tab containing opened file.
+	 */
+	public static Tab openFile(File file, boolean autoPlay) {
 		if(file.exists()) {
 			if(file.isDirectory()) {
 				return addTab(new DirView(file));
 			} else {
+				if(!MashidoPlayerMain.isSupportedSoundFile(file))return null;
 				Tab tab=addTab(new DirView(file.getParentFile()));
-				if(tab instanceof DirView) {
+				if(autoPlay&&tab instanceof DirView) {
 					((DirView)tab).play(file);
 				}
 				return tab;
@@ -92,22 +103,6 @@ public class MainView extends AnchorPane implements Saveable{
 		instance.tabPane.getSelectionModel().select(tab);
 		
 		return tab;
-	}
-	
-	@FXML
-	private void open() {
-		FileChooser chooser=new FileChooser();
-		chooser.setTitle("Select file");
-		chooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("All files", "*.*"),
-				new FileChooser.ExtensionFilter("WAV", "*.wav"),
-				new FileChooser.ExtensionFilter("MP3",  "*.mp3"),
-				new FileChooser.ExtensionFilter("MP4",  "*.mp4", "*.mp4a"),
-				new FileChooser.ExtensionFilter("AIFF","*.aif", "*.aiff")
-				);
-		File file=chooser.showOpenDialog(MashidoPlayerMain.getWindow());
-		if(file!=null)
-			openFile(file);
 	}
 	
 	@Override
@@ -153,5 +148,46 @@ public class MainView extends AnchorPane implements Saveable{
 				}
 			}
 		}
+	}
+
+	@FXML
+	private void open() {
+		FileChooser chooser=new FileChooser();
+		chooser.setTitle("Select file");
+		chooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("All files", "*.*"),
+				new FileChooser.ExtensionFilter("WAV", "*.wav"),
+				new FileChooser.ExtensionFilter("MP3",  "*.mp3"),
+				new FileChooser.ExtensionFilter("MP4",  "*.mp4", "*.mp4a"),
+				new FileChooser.ExtensionFilter("AIFF","*.aif", "*.aiff")
+				);
+		File file=chooser.showOpenDialog(MashidoPlayerMain.getWindow());
+		if(file!=null)
+			openFile(file);
+	}
+	
+	@FXML
+	private void dragOver(DragEvent event) {
+		if(event.getDragboard().hasFiles()) {
+			for(File file:event.getDragboard().getFiles()) {
+				if(MashidoPlayerMain.isSupportedSoundFile(file)||file.isDirectory()) {
+					event.acceptTransferModes(TransferMode.MOVE);
+					event.consume();
+					break;
+				}
+			}
+		}
+	}
+	@FXML
+	private void dragDropped(DragEvent event) {
+		if(event.getDragboard().hasFiles()) {
+			boolean autoPlay=event.getDragboard().getFiles().size()==1;
+			for(File file:event.getDragboard().getFiles()) {
+				if(MashidoPlayerMain.isSupportedSoundFile(file)||file.isDirectory()) {
+					openFile(file,autoPlay);
+				}
+			}
+		}
+		event.consume();
 	}
 }
