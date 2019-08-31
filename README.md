@@ -9,4 +9,4 @@ creating albums(TODO).
 To launch use MashidoPlayer.bat file, with compiled version(.jar) of it in same directory.
 Works also with "open with" feature.
 
-![screenshot](https://raw.githubusercontent.com/TakMashido/MashidoPlayer/master/screenschots/Screenchot.png)
+![screenshot](https://raw.githubusercontent.com/TakMashido/MashidoPlayer/master/screenshots/Screenshot.png)
