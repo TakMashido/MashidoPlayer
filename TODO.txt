@@ -1,10 +1,12 @@
-remove app freeze when opening dir containing lot's of files
 if trying to launch new instance of this open new tab with choosen dir/file in existing one.
-open file/dir on drag'n'drop to app window
+Add default audio volume
+add auto resize option (increase window height if not possible to show all file) 
 add albums creation option
 add chaging playing speed option
 add precise time jump option
+add autosave of app state
 add open dir in file system option
+remove app freeze when opening dir containing lot's of files(100+)
 create launcher/installer for it
 current time label near end of longer files shows time bigger then max time label. (Javafx Media bug?)
 create app icon
