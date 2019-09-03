@@ -103,7 +103,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 								} else if(res==ButtonType.NO){
 									event.consume();
 								} else assert false:"Unknown button clicked";
-							});;
+							});
 						}
 					}
 				}				
@@ -185,7 +185,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 		return pane;
 	}
 	public void stop(File file, int index) {
-		childs.set(index,FilePane.get(file, this, index));
+		childs.set(index,FilePane.get(file, this));
 	}
 	
 	private boolean finished=false;
@@ -212,9 +212,8 @@ public class DirView extends Tab implements Finishable,Saveable{
 				}
 			}
 			
-			int index=childs.size();
 			while(!fileQueue.isEmpty()) {
-				childs.add(FilePane.get(fileQueue.poll(), this, index++));
+				childs.add(FilePane.get(fileQueue.poll(), this));
 			}
 			
 			watcherThread=new Thread(new DirWatcher());
@@ -310,7 +309,7 @@ public class DirView extends Tab implements Finishable,Saveable{
 										childs.add(getLastDirIndex()+1,DirPane.get(added));
 									}else if(added.isFile()) {
 										if(MashidoPlayerMain.isSupportedSoundFile(added)) {
-											Node node=FilePane.get(added, DirView.this, childs.size());
+											Node node=FilePane.get(added, DirView.this);
 											if(node!=null)
 												childs.add(node);
 										}

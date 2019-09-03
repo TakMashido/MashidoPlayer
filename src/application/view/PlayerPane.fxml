@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane styleClass="file-tile" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.PlayerPane">
+<BorderPane styleClass="file-tile" xmlns="http://javafx.com/javafx/8.0.172" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.PlayerPane">
    <left>
       <Label fx:id="playedIndex" text="00:00" BorderPane.alignment="CENTER" />
    </left>

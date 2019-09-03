@@ -161,9 +161,6 @@
 .scroll-pane{
 	-fx-background-color: -style-background-color;
 }
-.scroll-pane:focused{
-	-fx-border-color: green;
-}
 .scroll-pane .corner{
 	-fx-background-color: -style-background-color;
 }
@@ -311,10 +308,6 @@
 }
 
 .tile-button{
-	-fx-pref-height: 54px;
-	-fx-min-height: -fx-pref-height;
-	-fx-max-height: -fx-pref-height;
-	
 	-fx-font-size: 15;
 	-fx-background-radius: 5;
 	-fx-blend-mode: hard-light;
@@ -362,9 +355,7 @@
 .stop-button>.graphics{
 	-fx-border-color: -style-default-color;
 	-fx-border-width: 2;
-	/*-fx-background-color: -style-default-color;**/
 	-fx-shape: "M 0 0 L 0 1 L 1 1 L 1 0 L 0 0 Z";
-	/*-fx-shape: "M 0 0 L 0 1 L 1 1 L 1 0 L 0 0 M .3 .3 L .3 .7 L .7 .7 L .7 .3 L .3 .3 M 0 0 L .3 .3 M 0 1 L .3 .7 M 1 1 L .7 .7 M 1 0 L .7 .3 Z";*/
 }
 
 .play-toggle-button{

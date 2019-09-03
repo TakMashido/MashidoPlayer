@@ -12,10 +12,12 @@ import org.w3c.dom.NodeList;
 import application.MashidoPlayerMain;
 import application.interfaces.Finishable;
 import application.interfaces.Saveable;
+import application.view.album.AlbumsView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -129,7 +131,21 @@ public class MainView extends AnchorPane implements Saveable{
 					return;
 				}
 				try {
-					Object tab=Class.forName(className).getDeclaredConstructor().newInstance();
+					Object tab=null;
+					Class<?> raw=Class.forName(className);
+					try {												//Do this in better way
+						tab=raw.getConstructor().newInstance();
+					} catch(NoSuchMethodException ex) {
+						try {
+							tab=raw.getMethod("get").invoke(null);
+						} catch (NoSuchMethodException ex2) {
+							
+							assert false:"Can't find unargumented constructor or get method for loading class "+className;
+							ex2.printStackTrace();
+							MashidoPlayerMain.getAlert(AlertType.ERROR, "Error", "Error ocured during loading app state", "Module "+className+"is corrupted. Contact dev");
+							continue;
+						}
+					}
 					if(tab instanceof Saveable) {
 						((Saveable) tab).loadState(e);
 					}
@@ -140,10 +156,10 @@ public class MainView extends AnchorPane implements Saveable{
 						return;
 					}
 					
-				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e1) {
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException e1) {
 					e1.printStackTrace();
 					MashidoPlayerMain.handleFailedToLoadDataFile();
-				} catch (RuntimeException ex) {				//Other loading error.
+				} catch (RuntimeException ex) {				//Other loading error.				//Skip them in better way
 					ex.printStackTrace();
 				}
 			}
@@ -152,16 +168,7 @@ public class MainView extends AnchorPane implements Saveable{
 
 	@FXML
 	private void open() {
-		FileChooser chooser=new FileChooser();
-		chooser.setTitle("Select file");
-		chooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("All files", "*.*"),
-				new FileChooser.ExtensionFilter("WAV", "*.wav"),
-				new FileChooser.ExtensionFilter("MP3",  "*.mp3"),
-				new FileChooser.ExtensionFilter("MP4",  "*.mp4", "*.mp4a"),
-				new FileChooser.ExtensionFilter("AIFF","*.aif", "*.aiff")
-				);
-		File file=chooser.showOpenDialog(MashidoPlayerMain.getWindow());
+		File file=MashidoPlayerMain.chooseFile();
 		if(file!=null)
 			openFile(file);
 	}

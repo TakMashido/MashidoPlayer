@@ -16,15 +16,14 @@ public class FilePane extends AnchorPane{
 	
 	private File file;
 	private DirView parent;
-	private int index;
 	
-	public static FilePane get(File file, DirView parent, int index) {
+	public static FilePane get(File file, DirView parent) {
 		try {
 			FXMLLoader loader=new FXMLLoader(MashidoPlayerMain.class.getResource("/application/view/FilePane.fxml"));
 			Pane view = loader.load();
 			FilePane controller=loader.getController();
 			
-			controller.constructor(file,parent,index);
+			controller.constructor(file,parent);
 			controller.getChildren().add(view);
 			
 			AnchorPane.setTopAnchor(view, 0d);
@@ -38,9 +37,8 @@ public class FilePane extends AnchorPane{
 			return null;											//Should't occur handle method has System.exit(-1);
 		}
 	}
-	private void constructor(File file, DirView parent, int index) {
+	private void constructor(File file, DirView parent) {
 		this.parent=parent;
-		this.index=index;
 		this.file=file;
 		fileName.setText(file.getName());
 	}
@@ -51,6 +49,6 @@ public class FilePane extends AnchorPane{
 	
 	@FXML
 	private void play() {
-		parent.play(file, index);
+		parent.play(file);
 	}
 }

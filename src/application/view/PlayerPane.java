@@ -182,7 +182,7 @@ public class PlayerPane extends AnchorPane{
 		return currentTime;
 	}
 	
-	void setPlay(boolean play) {
+	public void setPlay(boolean play) {
 		if(isPlaying==play)return;
 		if(play) {
 			player.play();
@@ -195,7 +195,7 @@ public class PlayerPane extends AnchorPane{
 	}
 	
 	@FXML
-	void togglePlay() {
+	public void togglePlay() {
 		setPlay(!isPlaying);
 	}
 	

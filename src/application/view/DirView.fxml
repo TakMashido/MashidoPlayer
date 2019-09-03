@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.172" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <ScrollPane fx:id="scrollPane" fitToWidth="true" BorderPane.alignment="CENTER">
          <content>

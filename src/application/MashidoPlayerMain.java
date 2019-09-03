@@ -24,11 +24,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import com.github.TakMashido.Tools.cssTools.CssTools;
+
 import application.view.MainView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class MashidoPlayerMain extends Application {
@@ -59,6 +62,8 @@ public class MashidoPlayerMain extends Application {
 			MainView.openFile(new File(str));
 		}
 		
+		File albumsDir=new File("albums");
+		if(!albumsDir.exists())albumsDir.mkdir();
 		loadDataFile();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -67,9 +72,6 @@ public class MashidoPlayerMain extends Application {
 				saveDataToFile();
 			}
 		});
-		
-//		MainView.openFile(new File("C:\\Users\\Przemek\\Desktop\\speech datasets\\spoken wikipedia\\wav\\to_label\\1"));
-//		MainView.openFile(new File("C:\\Users\\Przemek\\Desktop\\speech datasets\\spoken wikipedia\\wav\\to_label\\2"));
 	}
 	private void saveDataToFile() {
 		try {
@@ -94,7 +96,6 @@ public class MashidoPlayerMain extends Application {
 			StringWriter string=new StringWriter();
 			transformer.transform(new DOMSource(doc), new StreamResult(string));
 			Scanner output=new Scanner(string.toString());
-			//var fileOut=new PrintStream(new FileOutputStream(Config.mainFile));
 			OutputStreamWriter fileOut=new OutputStreamWriter(new FileOutputStream(new File("data.xml")),StandardCharsets.UTF_8);
 			while(output.hasNextLine()) {
 				String line=output.nextLine();
@@ -161,11 +162,14 @@ public class MashidoPlayerMain extends Application {
 	}
 	
 	public static void handleFailedToLoadException(IOException ex) {
-		ex.printStackTrace();
+		handleFailedToLoadException(ex, true);
+	}
+	public static void handleFailedToLoadException(IOException ex, boolean exit) {
+		if(ex!=null) ex.printStackTrace();
 		
 		getAlert(Alert.AlertType.ERROR,"Critical error","Failed to load window composition","One of files in jar file is missing or corrupted").showAndWait();
 		
-		System.exit(-1);
+		if(exit)System.exit(-1);
 	}
 	
 	public static Alert getAlert(AlertType type, String title, String header, String content) {
@@ -180,6 +184,7 @@ public class MashidoPlayerMain extends Application {
 	}
 	
 	public static boolean isSupportedSoundFile(File file) {
+		if(!file.exists()||!file.isFile())return false;
 		String name=file.getName();
 		name=name.substring(name.lastIndexOf('.')+1);
 		switch(name) {
@@ -197,6 +202,22 @@ public class MashidoPlayerMain extends Application {
 	
 	public static Stage getWindow() {
 		return primaryStage;
+	}
+	
+	/**Open's FileChooser to let user select valid audio file and return's  it. 
+	 * @return Choosed file
+	 */
+	public static File chooseFile() {
+		FileChooser chooser=new FileChooser();
+		chooser.setTitle("Select file");
+		chooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("All files", "*.*"),
+			new FileChooser.ExtensionFilter("WAV", "*.wav"),
+			new FileChooser.ExtensionFilter("MP3",  "*.mp3"),
+			new FileChooser.ExtensionFilter("MP4",  "*.mp4", "*.mp4a"),
+			new FileChooser.ExtensionFilter("AIFF","*.aif", "*.aiff")
+		);
+		return chooser.showOpenDialog(getWindow());
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {

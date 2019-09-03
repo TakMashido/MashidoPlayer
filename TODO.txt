@@ -1,4 +1,5 @@
 if trying to launch new instance of this open new tab with choosen dir/file in existing one.
+Save app window size
 Add default audio volume
 add auto resize option (increase window height if not possible to show all file) 
 add albums creation option

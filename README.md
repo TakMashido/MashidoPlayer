@@ -2,7 +2,7 @@
 
 Simple audio player. Created to study javaFX.
 
-Allows playing of multilple files in paranel(podcast + music??),
+Allows playing of multilple files in parallel(podcast + music??),
 saves state of playied files after app close,
 creating albums(TODO).
 
