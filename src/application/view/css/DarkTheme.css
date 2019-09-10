@@ -306,6 +306,9 @@
 	-fx-border-width: 2;
 	-fx-border-color: -style-border-color;
 }
+.file-tile:to-delete{
+	-fx-border-color: -style-default-color;
+}
 
 .tile-button{
 	-fx-font-size: 15;
@@ -451,5 +454,23 @@
 	-fx-background-color: -style-background-color;
 }
 
-
+.action-button>.graphics{
+	-fx-border-color: -style-default-color;
+	-fx-border-width: 3;
+	/*-fx-background-color: -style-default-color;**/
+	-fx-shape: "M .7 .5 L .3 .7 L .3 .3 Z";
+}
+.action-button:delete-state>.graphics{
+	-fx-shape: "M 0 0 a 1 1 0 1 0 .0001 .0001";
+}
+.action-button:delete-state>.graphics>.graphics{
+	-fx-border-insets: 3.5;
+	-fx-border-color: -style-default-color;
+	-fx-border-width: 3;
+	/*-fx-shape: "M 0 .25 l .25 .25 l -.25 .25 l .25 .25 l .25 -.25 l .25 .25 l .25 -.25 l -.25 -.25 l .25 -.25 l -.25 -.25 l -.25 .25 l -.25 -.25 z";*/
+	-fx-shape: "M 0 2 L 3 5 L 0 8 L 2 10 L 5 7 L 8 10 L 10 8 L 7 5 L 10 2 L 8 0 L 5 3 L 2 0 z";
+}
+.action-button:pressed{
+	-fx-text-fill: derive(-style-default-color,.8);
+}
 /*App specyfic*/

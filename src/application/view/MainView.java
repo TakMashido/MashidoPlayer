@@ -172,6 +172,10 @@ public class MainView extends AnchorPane implements Saveable{
 		if(file!=null)
 			openFile(file);
 	}
+	@FXML
+	private void showAlbums() {
+		addTab(AlbumsView.get());
+	}
 	
 	@FXML
 	private void dragOver(DragEvent event) {

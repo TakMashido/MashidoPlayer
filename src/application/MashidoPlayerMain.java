@@ -24,10 +24,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import com.github.TakMashido.Tools.cssTools.CssTools;
-
 import application.view.MainView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -181,6 +180,18 @@ public class MashidoPlayerMain extends Application {
 		if(content!=null)Return.setContentText(content);
 		
 		return Return;
+	}
+	public static void showAlert(AlertType type, String title, String header, String content) {
+		if(Platform.isFxApplicationThread()) {
+			getAlert(type, title, header, content).show();
+		} else {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					getAlert(type, title, header, content).show();
+				}
+			});
+		}
 	}
 	
 	public static boolean isSupportedSoundFile(File file) {

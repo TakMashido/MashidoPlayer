@@ -19,6 +19,7 @@ import org.w3c.dom.NodeList;
 
 import application.MashidoPlayerMain;
 import application.interfaces.Finishable;
+import application.interfaces.PlayerHolder;
 import application.interfaces.Saveable;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -37,7 +38,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-public class DirView extends Tab implements Finishable,Saveable{
+public class DirView extends Tab implements Finishable,Saveable,PlayerHolder{
 	@FXML
 	private Label dirName;
 	@FXML
@@ -147,7 +148,8 @@ public class DirView extends Tab implements Finishable,Saveable{
 			Node node=childs.get(i);
 			if(node instanceof FilePane) {
 				if(((FilePane)node).getFile().equals(file)) {
-					play(file,i);
+					PlayerPane player=openPlayerPane(file,i);
+					player.setPlay(true);
 					return;
 				}
 			} else if(node instanceof PlayerPane) {
@@ -159,17 +161,14 @@ public class DirView extends Tab implements Finishable,Saveable{
 			}
 		}
 	}
-	public void play(File file, int index) {
-		PlayerPane pane=openPlayerPane(file,index);
-		
-		pane.togglePlay();
-	}
 	public PlayerPane openPlayerPane(File file) {
 		for(int i=0;i<childs.size();i++) {
 			Node node=childs.get(i);
 			if(node instanceof FilePane) {
 				if(((FilePane)node).getFile().equals(file)) {
-					return openPlayerPane(file,i);
+					PlayerPane player=PlayerPane.get(file, this);
+					childs.set(i, player);
+					return player;
 				}
 			} else if(node instanceof PlayerPane) {
 				PlayerPane player=(PlayerPane)node;
@@ -179,13 +178,14 @@ public class DirView extends Tab implements Finishable,Saveable{
 		}
 		return null;
 	}
-	public PlayerPane openPlayerPane(File file,int index) {
-		PlayerPane pane=PlayerPane.get(file, this, index);;
-		childs.set(index, pane);
-		return pane;
+	private PlayerPane openPlayerPane(File file, int index) {
+		PlayerPane player=PlayerPane.get(file, this);
+		childs.set(index, player);
+		return player;
 	}
-	public void stop(File file, int index) {
-		childs.set(index,FilePane.get(file, this));
+	
+	public void stop(PlayerPane pane) {
+		childs.set(getFileIndex(pane.getFile()),FilePane.get(pane.getFile(), this));
 	}
 	
 	private boolean finished=false;

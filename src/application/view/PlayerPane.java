@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import application.MashidoPlayerMain;
+import application.interfaces.PlayerHolder;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -43,9 +44,8 @@ public class PlayerPane extends AnchorPane{
 	
 	private boolean updateProgressBar=true;
 	
-	private DirView parent;
+	private PlayerHolder parent;
 	private File file;
-	private int index;
 	
 	private double length;				//in seconds
 	private Duration currentTime=Duration.ZERO;
@@ -54,13 +54,13 @@ public class PlayerPane extends AnchorPane{
 	private Media media;
 	private MediaPlayer player;
 	
-	public static PlayerPane get(File file, DirView parent, int index) {
+	public static PlayerPane get(File file, PlayerHolder parent) {
 		try {
 			FXMLLoader loader=new FXMLLoader(MashidoPlayerMain.class.getResource("/application/view/PlayerPane.fxml"));
 			Pane view = loader.load();
 			PlayerPane controller=loader.getController();
 			
-			if(!controller.constructor(file,parent,index))return null;
+			if(!controller.constructor(file,parent))return null;
 			controller.getChildren().add(view);
 			
 			AnchorPane.setTopAnchor(view, 0d);
@@ -74,9 +74,8 @@ public class PlayerPane extends AnchorPane{
 			return null;											//Should't occur handle method has System.exit(-1);
 		}
 	}
-	private boolean constructor(File file, DirView parent, int index) {
+	private boolean constructor(File file, PlayerHolder parent) {
 		this.parent=parent;
-		this.index=index;
 		this.file=file;
 		fileName.setText(file.getName());
 		
@@ -235,6 +234,6 @@ public class PlayerPane extends AnchorPane{
 	@FXML
 	private void stop(){
 		dispose();
-		parent.stop(file, index);
+		parent.stop(this);
 	}
 }
