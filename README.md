@@ -1,4 +1,4 @@
-#MashidoPlayer
+# MashidoPlayer
 
 Simple audio player. Created to study javaFX.
 
